@@ -1,6 +1,14 @@
-#include "crenderutils.h"
+//#include "crenderutils.h"
+#include "Window.h"""
 
 int main()
 {
-	Test();
+	Window window;
+	window.Init();
+	while (window.Step())
+	{
+
+	}
+	window.Term();
+	return 0;
 }
