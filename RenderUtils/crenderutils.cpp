@@ -1,6 +1,13 @@
+#define TINYOBJLOADER_IMPLEMENTATION
+#include "Obj\tiny_obj_loader.h"
+#include <random>
 #include "gldecs.h"
 #include "crenderutils.h"
 #include "Vertex.h"
+#include <cstring>
+#include <fstream>
+#include <iostream>
+#include <string>
 
 Geometry MakeGeometry(const Vertex *verts, size_t vsize, const unsigned int *tris, size_t tsize)
 {
@@ -46,6 +53,42 @@ void FreeGeometry(Geometry &geo)
 	geo = {0, 0, 0, 0};
 }
 
+Geometry LoadObj(const char *path)
+{
+	tinyobj::attrib_t attrib;
+	std::vector<tinyobj::shape_t> shapes;
+	std::vector<tinyobj::material_t> materials;
+	std::string err;
+
+	bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, path);
+
+	Vertex   *verts = new Vertex[attrib.vertices.size() / 3];
+	unsigned * tris = new unsigned[shapes[0].mesh.indices.size()];
+
+	for (int i = 0; i < attrib.vertices.size() / 3; ++i)
+	{
+		verts[i] = { attrib.vertices[i * 3],
+			attrib.vertices[i * 3 + 1],
+			attrib.vertices[i * 3 + 2], 1 };
+
+		verts[i].color[0] = rand() * 1.0f / RAND_MAX;
+		verts[i].color[1] = rand() * 1.0f / RAND_MAX;
+		verts[i].color[2] = rand() * 1.0f / RAND_MAX;
+		verts[i].color[3] = 1;
+	}
+
+	for (int i = 0; i < shapes[0].mesh.indices.size(); ++i)
+		tris[i] = shapes[0].mesh.indices[i].vertex_index;
+
+	Geometry retval = MakeGeometry(verts, attrib.vertices.size() / 3,
+		tris, shapes[0].mesh.indices.size());
+
+	delete[] verts;
+	delete[] tris;
+
+	return retval;
+}
+
 Shader MakeShader(const char * vsource, const char * fsource)
 {
 	Shader retval;
@@ -74,6 +117,22 @@ void FreeShader(Shader &shader)
 {
 	glDeleteProgram(shader.handle);
 	shader.handle = 0;
+}
+
+std::string GetTextFromFile(const char *path)
+{
+	std::ifstream textFile{ path };
+	std::string file_contents
+	{
+		std::istreambuf_iterator<char>(textFile),
+		std::istreambuf_iterator<char>()
+	};
+	return file_contents;
+}
+
+Shader LoadShader(const char *vpath, const char *fpath)
+{
+	return MakeShader(GetTextFromFile(vpath).c_str(), GetTextFromFile(fpath).c_str());
 }
 
 void Draw(const Shader &shader, const Geometry &geometry)

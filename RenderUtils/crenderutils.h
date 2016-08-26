@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 struct Vertex;
 
 struct Geometry
@@ -15,13 +16,15 @@ Geometry MakeGeometry(const Vertex *verts, size_t vsize,
 
 void FreeGeometry(Geometry &);
 
+Geometry LoadObj(const char *path);
+
 struct Shader
 {
 	unsigned handle;
 };
-
 Shader MakeShader(const char *vsource, const char *fsource);
-
+std::string GetTextFromFile(const char *path);
 void FreeShader(Shader &);
+Shader LoadShader(const char *vpath, const char *fpath);
 
 void Draw(const Shader &, const Geometry &);
