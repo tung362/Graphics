@@ -1,6 +1,4 @@
-#define GLEW_STATIC
-
-#include "GLEW\glew.h"
+#include "gldecs.h"
 #include "crenderutils.h"
 #include "Vertex.h"
 
@@ -10,9 +8,9 @@ Geometry MakeGeometry(const Vertex *verts, size_t vsize, const unsigned int *tri
 	retval.size = tsize;
 
 	//Define the variables
-	glCreateBuffers(1, &retval.vbo); //store vertices
-	glCreateBuffers(1, &retval.ibo); //store indices(triangle)
-	glCreateVertexArrays(1, &retval.vao); //store attribute information
+	glGenBuffers(1, &retval.vbo); //store vertices
+	glGenBuffers(1, &retval.ibo); //store indices(triangle)
+	glGenVertexArrays(1, &retval.vao); //store attribute information
 
 	//Scope the variables
 	glBindVertexArray(retval.vao);
