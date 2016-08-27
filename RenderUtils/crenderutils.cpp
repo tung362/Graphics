@@ -147,3 +147,14 @@ void Draw(const Shader &shader, const Geometry &geometry)
 	//If an IBO is bound, we don't need to provide any indices
 	glDrawElements(GL_TRIANGLES, geometry.size, GL_UNSIGNED_INT, 0);
 }
+
+void Draw(const Shader &shader, const Geometry &geometry, float time)
+{
+	glUseProgram(shader.handle);
+	glBindVertexArray(geometry.vao);
+
+	int loc = glGetUniformLocation(shader.handle, "time");
+	glUniform1f(loc, time);
+
+	glDrawElements(GL_TRIANGLES, geometry.size, GL_UNSIGNED_INT, 0);
+}

@@ -1,23 +1,28 @@
+#include <iostream>
+
 #include "Window.h"
 #include "crenderutils.h"
-#include "Vertex.h"
-#include <iostream>
+#include "Gallery.h"
 
 int main()
 {
 	Window window;
-	window.Init();
+	Gallery gallery;
 
-	Geometry geometry2 = LoadObj("../res/models/sphere.obj");
-	Shader shader = LoadShader("../res/shaders/SimpleVert.txt", "../res/shaders/SimpleFrag.txt");
+	window.Init(800, 600, "I got a title :^)");
+
+	gallery.LoadObjectOBJ("Sphere", "../res/models/sphere.obj");
+	gallery.LoadShader("Simple", "../res/shaders/SimpleVert.txt", "../res/shaders/SimpleFrag.txt");
+
+	float time = 0;
 
 	while (window.Step())
 	{
-		Draw(shader, geometry2);
+		time += 0.0016667f;
+		Draw(gallery.GetShader("Simple"), gallery.GetObject("Sphere"), time);
 	}
 
-	FreeGeometry(geometry2);
-	FreeShader(shader);
+	gallery.Term();
 	window.Term();
 	return 0;
 }

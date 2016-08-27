@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
 #include <map>
+
 #include "crenderutils.h"
+#include "Vertex.h"
 
 class Gallery
 {

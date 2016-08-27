@@ -1,12 +1,20 @@
-#version 330 
+#version 330
 
-layout(location = 0)in vec4 position; 
-layout(location = 1)in vec4 color; 
+layout(location = 0) in vec4 position;
+layout(location = 1) in vec4 color;
 
-out vec4 vColor; 
+// out sends data to the next step of the pipeline
+out vec4 vColor;
+out vec4 vPosition;
 
-void main() 
-{ 
-	vColor = color; 
-	gl_Position = position; 
-} 
+uniform float time = 0.0;
+
+void main()
+{
+	vColor = color;
+	vPosition = position;
+	gl_Position = position;
+
+
+	gl_Position.y += cos(time * 2 + position.y)/2;
+}
