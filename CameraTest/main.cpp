@@ -3,6 +3,9 @@
 #include "Window.h"
 #include "crenderutils.h"
 #include "Gallery.h"
+#include "Timer.h"
+#include "Input.h"
+#include "Camera.h"
 
 #include "GLM\glm.hpp"
 #include "GLM\ext.hpp"
@@ -11,8 +14,13 @@ int main()
 {
 	Window window;
 	Gallery gallery;
+	Time time;
+	Input input;
 
-	window.Init(800, 600, "I got a title :^)");
+	window.Init(1280, 720, "I got a title :^)");
+	gallery.Init();
+	input.Init(window);
+	time.Init();
 
 	gallery.LoadObjectOBJ("Sphere", "../res/models/sphere.obj");
 	gallery.LoadObjectOBJ("Cube", "../res/models/cube.obj");
@@ -31,13 +39,28 @@ int main()
 	//model = glm::scale(glm::vec3( .5f, .5f, .5f )) * glm::translate(glm::vec3(.1f, .1f, .1f));
 	model2 = glm::translate(glm::vec3(1, 0, 1));
 
-	float time = 0;
+	float dt = 0;
+	float ct = 0;
+
+	FlyCamera cam;
+	cam.JumpTo(glm::vec3(20, 0, 0));
+	cam.LookAt(glm::vec3(0, 0, 0));
 
 	while (window.Step())
 	{
-		time += 0.016667f;
+		time.Step();
+		input.Step();
+		dt = time.GetDeltaTime();
 
-		model3 = glm::translate(glm::vec3(3, 0, 3)) * glm::rotate(time, glm::vec3(0, 1, 0));
+		view = cam.GetView();
+		proj = cam.GetProjection();
+
+		cam.Update(input, time);
+
+		if (input.GetKeyState('D') == Input::DOWN) ct += time.GetDeltaTime();
+		if (input.GetKeyState('A') == Input::DOWN) ct -= time.GetDeltaTime();
+
+		model3 = glm::translate(glm::vec3(3, 0, 3)) * glm::rotate(ct, glm::vec3(0, 1, 0));
 
 		Draw(gallery.GetShader("SimpleCamera"), gallery.GetObject("Cube"), 
 												glm::value_ptr(model), 
@@ -56,6 +79,8 @@ int main()
 	}
 
 	gallery.Term();
+	input.Term();
+	time.Term();
 	window.Term();
 	return 0;
 }
