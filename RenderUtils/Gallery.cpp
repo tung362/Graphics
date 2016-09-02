@@ -50,9 +50,20 @@ bool Gallery::LoadObjectOBJ(const char * name, const char * path)
 	return true;
 }
 
+bool Gallery::LoadTexture(const char * name, const char * path)
+{
+	textures[name] = LoadText(path);
+	return true;
+}
+
 const Shader &Gallery::GetShader(const char * name)
 {
 	return shaders[name];
+}
+
+const Texture & Gallery::GetTexture(const char * name)
+{
+	return textures[name];
 }
 
 const Geometry &Gallery::GetObject(const char * name)

@@ -9,6 +9,9 @@
 #include <iostream>
 #include <string>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "STB\stb_image.h"
+
 Geometry MakeGeometry(const Vertex *verts, size_t vsize, const unsigned int *tris, size_t tsize)
 {
 	Geometry retval;
@@ -162,8 +165,8 @@ void Draw(const Shader &shader, const Geometry &geometry, float time)
 void Draw(const Shader &s, const Geometry &g, const float m[16], const float v[16], const float p[16], float color2)
 {
 	glEnable(GL_CULL_FACE);
-	glDisable(GL_DEPTH_TEST);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glDisable(GL_DEPTH_TEST);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	glUseProgram(s.handle);
 	glBindVertexArray(g.vao);
@@ -178,3 +181,72 @@ void Draw(const Shader &s, const Geometry &g, const float m[16], const float v[1
 	glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
 }
 
+Texture MakeTexture(unsigned width, unsigned height, unsigned format, const unsigned char * pixels)
+{
+	Texture retval = {0, width, height, format};
+	glGenTextures(1, &retval.handle);
+	glBindTexture(GL_TEXTURE_2D, retval.handle);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, pixels);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	return retval;
+}
+
+Texture LoadText(const char * path)
+{
+	int w, h, f;
+	unsigned char *p;
+
+	Texture retval = { 0, 0, 0, 0 };
+
+	stbi_set_flip_vertically_on_load(true);
+	p = stbi_load(path, &w, &h, &f, STBI_default);
+
+	if (!p) return retval;
+
+	switch (f)
+	{
+	case STBI_grey: f = GL_RED; break;
+	case STBI_grey_alpha: f = GL_RG; break;
+	case STBI_rgb: f = GL_RGB; break;
+	case STBI_rgb_alpha: GL_RGBA; break;
+	}
+
+	retval = MakeTexture(w, h, f, p);
+	stbi_image_free(p);
+	return retval;
+}
+
+void FreeTexture(Texture &t)
+{
+	glDeleteTextures(1, &t.handle);
+	t = { 0, 0, 0, 0 };
+}
+
+void Draw(const Shader &s, const Geometry &g, const Texture &t, const float m[16], const float v[16], const float p[16], float color2)
+{
+	glEnable(GL_CULL_FACE);
+	//glDisable(GL_DEPTH_TEST);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	glUseProgram(s.handle);
+	glBindVertexArray(g.vao);
+
+	glUniformMatrix4fv(0, 1, GL_FALSE, p);
+	glUniformMatrix4fv(1, 1, GL_FALSE, v);
+	glUniformMatrix4fv(2, 1, GL_FALSE, m);
+
+	int loc = glGetUniformLocation(s.handle, "color2");
+	glUniform1f(loc, color2);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, t.handle);
+	glUniform1i(4, 0);
+
+	glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
+}

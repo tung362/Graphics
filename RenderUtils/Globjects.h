@@ -12,3 +12,13 @@ struct Shader
 {
 	unsigned handle;
 };
+
+struct Texture
+{
+	unsigned handle;
+	int width, height, format;
+	//1 channel, gray scale
+	//2 channel,
+	//3 channel,
+	//4 channel, with alpha
+};

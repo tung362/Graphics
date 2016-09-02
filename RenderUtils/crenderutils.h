@@ -21,3 +21,11 @@ void Draw(const Shader &, const Geometry &);
 void Draw(const Shader &, const Geometry &, float time);
 
 void Draw(const Shader &, const Geometry &, const float m[16], const float v[16], const float p[16], float color2);
+
+Texture MakeTexture(unsigned width, unsigned height, unsigned format, const unsigned char *pixels);
+
+Texture LoadText(const char *path);
+
+void FreeTexture(Texture &t);
+
+void Draw(const Shader &, const Geometry &, const Texture &, const float m[16], const float v[16], const float p[16], float color2);
