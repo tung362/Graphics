@@ -6,6 +6,7 @@ in  vec4  vColor;
 out vec4  outColor;
 
 uniform float time = 0.0;
+uniform float color2 = 0.0;
 
 
 void main ()
@@ -18,10 +19,14 @@ void main ()
 	vec4 cPos = vPosition;
 
 
-	outColor.r = (cos(time*1.3 + cPos.x)+1)/2;
-	outColor.g = (sin(time*1.3 + cPos.y)+1)/2;
+	outColor.r = color2 * (cos(time*1.3 + cPos.x)+1)/2;
+	outColor.g = color2 *(sin(time*1.3 + cPos.y)+1)/2;
 
-	outColor.b = vPosition.x;
+	outColor.b = color2 * vPosition.x;
+	
+	//outColor.r = color2;
+	//outColor.g = color2;
+	//outColor.b = color2;
 
 	float rad = sqrt(cPos.x*cPos.x + cPos.y*cPos.y);
 

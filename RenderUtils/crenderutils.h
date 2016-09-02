@@ -20,4 +20,4 @@ void Draw(const Shader &, const Geometry &);
 
 void Draw(const Shader &, const Geometry &, float time);
 
-void Draw(const Shader &, const Geometry &, const float m[16], const float v[16], const float p[16]);
+void Draw(const Shader &, const Geometry &, const float m[16], const float v[16], const float p[16], float color2);

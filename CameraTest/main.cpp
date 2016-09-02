@@ -41,6 +41,7 @@ int main()
 
 	float dt = 0;
 	float ct = 0;
+	float colorswitch = 0;
 
 	FlyCamera cam;
 	cam.JumpTo(glm::vec3(20, 0, 0));
@@ -60,22 +61,26 @@ int main()
 		if (input.GetKeyState('D') == Input::DOWN) ct += time.GetDeltaTime();
 		if (input.GetKeyState('A') == Input::DOWN) ct -= time.GetDeltaTime();
 
+		if (input.GetKeyState('1') == Input::PRESS) colorswitch = 0;
+		if (input.GetKeyState('2') == Input::PRESS) colorswitch = 1;
+
 		model3 = glm::translate(glm::vec3(3, 0, 3)) * glm::rotate(ct, glm::vec3(0, 1, 0));
 
 		Draw(gallery.GetShader("SimpleCamera"), gallery.GetObject("Cube"), 
 												glm::value_ptr(model), 
 												glm::value_ptr(view), 
-												glm::value_ptr(proj));
+												glm::value_ptr(proj), colorswitch);
 
 		Draw(gallery.GetShader("SimpleCamera"), gallery.GetObject("Sphere"),
 												glm::value_ptr(model2),
 												glm::value_ptr(view),
-												glm::value_ptr(proj));
+												glm::value_ptr(proj), colorswitch);
 
 		Draw(gallery.GetShader("SimpleCamera"), gallery.GetObject("Crystal"),
 												glm::value_ptr(model3),
 												glm::value_ptr(view),
-												glm::value_ptr(proj));
+												glm::value_ptr(proj), colorswitch);
+
 	}
 
 	gallery.Term();
