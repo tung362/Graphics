@@ -20,6 +20,7 @@ public:
 
 	bool LoadObjectOBJ(const char *name, const char *path);
 
+	bool MakeTexture(const char* name, unsigned width, unsigned height, unsigned format, const unsigned char *pixels);
 	bool LoadTexture(const char *name, const char *path);
 
 

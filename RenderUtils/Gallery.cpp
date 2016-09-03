@@ -50,9 +50,15 @@ bool Gallery::LoadObjectOBJ(const char * name, const char * path)
 	return true;
 }
 
+bool Gallery::MakeTexture(const char* name, unsigned width, unsigned height, unsigned format, const unsigned char *pixels)
+{
+	textures[name] = MakeTex(width, height, format, pixels);
+	return true;
+}
+
 bool Gallery::LoadTexture(const char * name, const char * path)
 {
-	textures[name] = LoadText(path);
+	textures[name] = LoadTex(path);
 	return true;
 }
 

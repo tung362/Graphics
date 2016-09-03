@@ -181,7 +181,7 @@ void Draw(const Shader &s, const Geometry &g, const float m[16], const float v[1
 	glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
 }
 
-Texture MakeTexture(unsigned width, unsigned height, unsigned format, const unsigned char * pixels)
+Texture MakeTex(unsigned width, unsigned height, unsigned format, const unsigned char * pixels)
 {
 	Texture retval = {0, width, height, format};
 	glGenTextures(1, &retval.handle);
@@ -197,7 +197,7 @@ Texture MakeTexture(unsigned width, unsigned height, unsigned format, const unsi
 	return retval;
 }
 
-Texture LoadText(const char * path)
+Texture LoadTex(const char * path)
 {
 	int w, h, f;
 	unsigned char *p;
@@ -217,7 +217,7 @@ Texture LoadText(const char * path)
 	case STBI_rgb_alpha: GL_RGBA; break;
 	}
 
-	retval = MakeTexture(w, h, f, p);
+	retval = MakeTex(w, h, f, p);
 	stbi_image_free(p);
 	return retval;
 }
@@ -232,7 +232,7 @@ void Draw(const Shader &s, const Geometry &g, const Texture &t, const float m[16
 {
 	glEnable(GL_CULL_FACE);
 	//glDisable(GL_DEPTH_TEST);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	glUseProgram(s.handle);
 	glBindVertexArray(g.vao);
