@@ -32,12 +32,16 @@ Geometry MakeGeometry(const Vertex *verts, size_t vsize, const unsigned int *tri
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, tsize * sizeof(unsigned), tris, GL_STATIC_DRAW);
 
 	//attribute let us tell openGL how the memory is laid out
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(0); //Position
+	glEnableVertexAttribArray(1); //Color
+	glEnableVertexAttribArray(2); //Normal
+	glEnableVertexAttribArray(3); //TexCoord
 
 	//index of the attribute, number of elements, type, normalized?
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*) 16);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)Vertex::POSITION);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)Vertex::COLOR);
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)Vertex::NORMAL);
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)Vertex::TEXCOORD);
 
 	//Unscope the variables
 	glBindVertexArray(0);
@@ -65,26 +69,27 @@ Geometry LoadObj(const char *path)
 
 	bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, path);
 
-	Vertex   *verts = new Vertex[attrib.vertices.size() / 3];
-	unsigned * tris = new unsigned[shapes[0].mesh.indices.size()];
+	int vsize = shapes[0].mesh.indices.size();
+	Vertex   *verts = new Vertex[vsize];
+	unsigned * tris = new unsigned[vsize];
 
-	for (int i = 0; i < attrib.vertices.size() / 3; ++i)
+	auto &ind = shapes[0].mesh.indices;
+	for (int i = 0; i < vsize; ++i)
 	{
-		verts[i] = { attrib.vertices[i * 3],
-			attrib.vertices[i * 3 + 1],
-			attrib.vertices[i * 3 + 2], 1 };
+		auto ind = shapes[0].mesh.indices[i];
 
-		verts[i].color[0] = rand() * 1.0f / RAND_MAX;
-		verts[i].color[1] = rand() * 1.0f / RAND_MAX;
-		verts[i].color[2] = rand() * 1.0f / RAND_MAX;
-		verts[i].color[3] = 1;
+		const float *n = &attrib.normals[ind.normal_index * 3];
+		const float *p = &attrib.vertices[ind.vertex_index * 3];
+		const float *t = &attrib.texcoords[ind.texcoord_index * 2];
+
+		verts[i].position = glm::vec4(p[0], p[1], p[2], 1.f);
+		verts[i].normal = glm::vec4(n[0], n[1], n[2], 0.f);
+		verts[i].texcoord = glm::vec2(t[0], t[1]);
+
+		tris[i] = i;
 	}
 
-	for (int i = 0; i < shapes[0].mesh.indices.size(); ++i)
-		tris[i] = shapes[0].mesh.indices[i].vertex_index;
-
-	Geometry retval = MakeGeometry(verts, attrib.vertices.size() / 3,
-		tris, shapes[0].mesh.indices.size());
+	Geometry retval = MakeGeometry(verts, vsize, tris, vsize);
 
 	delete[] verts;
 	delete[] tris;
@@ -197,6 +202,25 @@ Texture MakeTex(unsigned width, unsigned height, unsigned format, const unsigned
 	return retval;
 }
 
+Texture MakeTexF(unsigned square, const float * pixels)
+{
+	Texture retval = { 0, square, square, GL_RED }; //GL_RED, GL_RG, GL_RGB, GL_RGBA
+	glGenTextures(1, &retval.handle);
+	glBindTexture(GL_TEXTURE_2D, retval.handle);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, square, square, 0, GL_RED, GL_FLOAT, pixels);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	return retval;
+}
+
 Texture LoadTex(const char * path)
 {
 	int w, h, f;
@@ -244,6 +268,29 @@ void Draw(const Shader &s, const Geometry &g, const Texture &t, const float m[16
 	int loc = glGetUniformLocation(s.handle, "color2");
 	glUniform1f(loc, color2);
 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, t.handle);
+	glUniform1i(4, 0);
+
+	glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
+}
+
+void draw(const Shader &s, const Geometry &g, const Texture &t, const float M[16], const float V[16], const float P[16], float time)
+{
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+
+	glUseProgram(s.handle);
+	glBindVertexArray(g.vao);
+
+
+	glUniformMatrix4fv(0, 1, GL_FALSE, P);
+	glUniformMatrix4fv(1, 1, GL_FALSE, V);
+	glUniformMatrix4fv(2, 1, GL_FALSE, M);
+
+	glUniform1f(3, time);
+
+	// Minimum guaranteed is 8.
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, t.handle);
 	glUniform1i(4, 0);

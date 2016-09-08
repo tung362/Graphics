@@ -5,8 +5,10 @@ in  vec4  vPosition;
 in  vec4  vColor;
 out vec4  outColor;
 
-uniform float time = 0.0;
-uniform float color2 = 0.0;
+layout(location = 0) uniform mat4 Projection;	
+layout(location = 1) uniform mat4 View;		
+layout(location = 2) uniform mat4 Model;
+layout(location = 3) uniform float time = 0.0;
 
 
 void main ()
@@ -19,14 +21,10 @@ void main ()
 	vec4 cPos = vPosition;
 
 
-	outColor.r = color2 * (cos(time*1.3 + cPos.x)+1)/2;
-	outColor.g = color2 *(sin(time*1.3 + cPos.y)+1)/2;
+	outColor.r = (cos(time*1.3 + cPos.x)+1)/2;
+	outColor.g = (sin(time*1.3 + cPos.y)+1)/2;
 
-	outColor.b = color2 * vPosition.x;
-	
-	//outColor.r = color2;
-	//outColor.g = color2;
-	//outColor.b = color2;
+	outColor.b = vPosition.x;
 
 	float rad = sqrt(cPos.x*cPos.x + cPos.y*cPos.y);
 
@@ -35,4 +33,8 @@ void main ()
 	{
 	outColor  = vec4(1,1,1,1) - (sin(time*1.3 + cPos.y)+1)/2;
 	}
+
+	//outColor = vPosition;
+
+	outColor.r = gl_FragCoord.z;
 }

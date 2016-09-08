@@ -6,6 +6,7 @@
 #include "Timer.h"
 #include "Input.h"
 #include "Camera.h"
+#include "Procgen.h"
 
 #include "GLM\glm.hpp"
 #include "GLM\ext.hpp"
@@ -68,7 +69,7 @@ void GenerateGrid(unsigned int rows, unsigned int cols, Gallery &gallery)
 		}
 	}
 
-	//gallery.MakeTexture("Perlin", 64, 64,  );
+	//gallery.MakeTexture("Perlin", 64, 64, 0x1907, );
 
 	/*glGenTextures(1, &m_perlin_texture);
 	glBindTexture(GL_TEXTURE_2D, m_perlin_texture);
@@ -97,12 +98,11 @@ int main()
 	input.Init(window);
 	time.Init();
 
-	GenerateGrid(64, 64, gallery);
+	//GenerateGrid(64, 64, gallery);
+	Geometry plane = GenGrid(512, 2);
+	Texture noise = GenNoise(64, 8);
 
-	Vertex verts[] = { {-1, -1, 0, 1}, {-1, 1, 0, 1},
-					   {1, 1, 0, 1}, {1, -1, 0, 1}, };
 	unsigned tris[] = {0, 1, 2, 2, 3, 0};
-	gallery.MakeObject("quad", verts, 4, tris, 6);
 
 	unsigned char pixels[] = {255, 255, 0};
 	//Texture tex = MakeTexture(1, 1, 0x1907, pixels);
@@ -171,10 +171,15 @@ int main()
 			glm::value_ptr(view),
 			glm::value_ptr(proj), colorswitch);*/
 
-		Draw(gallery.GetShader("SimpleTexture"), gallery.GetObject("Grid"), gallery.GetTexture("Forest"),
+		/*Draw(gallery.GetShader("SimpleTexture"), gallery.GetObject("Grid"), gallery.GetTexture("Forest"),
 			glm::value_ptr(model),
 			glm::value_ptr(view),
-			glm::value_ptr(proj), colorswitch);
+			glm::value_ptr(proj), colorswitch);*/
+
+		draw(gallery.GetShader("SimpleTexture"), plane, noise,
+			glm::value_ptr(model),
+			glm::value_ptr(view),
+			glm::value_ptr(proj), ct);
 
 	}
 	//FreeTexture(tex);
