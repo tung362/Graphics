@@ -22,3 +22,10 @@ struct Texture
 	//3 channel,
 	//4 channel, with alpha
 };
+
+struct Framebuffer
+{
+	unsigned handle;
+	unsigned width, height;
+	Texture colors[8];
+};

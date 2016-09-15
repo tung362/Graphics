@@ -80,11 +80,15 @@ Geometry LoadObj(const char *path)
 
 		const float *n = &attrib.normals[ind.normal_index * 3];
 		const float *p = &attrib.vertices[ind.vertex_index * 3];
-		const float *t = &attrib.texcoords[ind.texcoord_index * 2];
 
 		verts[i].position = glm::vec4(p[0], p[1], p[2], 1.f);
 		verts[i].normal = glm::vec4(n[0], n[1], n[2], 0.f);
-		verts[i].texcoord = glm::vec2(t[0], t[1]);
+
+		if (ind.texcoord_index >= 0)
+		{
+			const float *t = &attrib.texcoords[ind.texcoord_index * 2];
+			verts[i].texcoord = glm::vec2(t[0], t[1]);
+		}
 
 		tris[i] = i;
 	}
@@ -188,10 +192,10 @@ void Draw(const Shader &s, const Geometry &g, const float m[16], const float v[1
 
 Texture MakeTex(unsigned width, unsigned height, unsigned format, const unsigned char * pixels)
 {
-	Texture retval = {0, width, height, format};
+	Texture retval = { 0, width, height, format };
+
 	glGenTextures(1, &retval.handle);
 	glBindTexture(GL_TEXTURE_2D, retval.handle);
-
 	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, pixels);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -226,21 +230,21 @@ Texture LoadTex(const char * path)
 	int w, h, f;
 	unsigned char *p;
 
-	Texture retval = { 0, 0, 0, 0 };
+	Texture retval = {0,0,0,0};
 
-	stbi_set_flip_vertically_on_load(true);
+	stbi_set_flip_vertically_on_load(true); // DirectX or OpenGL
 	p = stbi_load(path, &w, &h, &f, STBI_default);
 
 	if (!p) return retval;
 
 	switch (f)
 	{
-	case STBI_grey: f = GL_RED; break;
-	case STBI_grey_alpha: f = GL_RG; break;
-	case STBI_rgb: f = GL_RGB; break;
-	case STBI_rgb_alpha: GL_RGBA; break;
+	case STBI_grey : f = GL_RED;  break;
+	case STBI_grey_alpha: f = GL_RG;   break;
+	case STBI_rgb : f = GL_RGB;  break;
+	case STBI_rgb_alpha	: f = GL_RGBA; break;
 	}
-
+	
 	retval = MakeTex(w, h, f, p);
 	stbi_image_free(p);
 	return retval;
@@ -296,4 +300,67 @@ void draw(const Shader &s, const Geometry &g, const Texture &t, const float M[16
 	glUniform1i(4, 0);
 
 	glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
+}
+
+void drawPhong(const Shader &s, const Geometry &g, const float M[16], const float V[16], const float P[16])
+{
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+
+	glUseProgram(s.handle);
+	glBindVertexArray(g.vao);
+
+
+	glUniformMatrix4fv(0, 1, GL_FALSE, P);
+	glUniformMatrix4fv(1, 1, GL_FALSE, V);
+	glUniformMatrix4fv(2, 1, GL_FALSE, M);
+
+
+
+	glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
+}
+
+void drawPhong(const Shader &s, const Geometry &g, const float M[16], const float V[16], const float P[16], const Texture *T, unsigned t_count)
+{
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+
+	glUseProgram(s.handle);
+	glBindVertexArray(g.vao);
+
+	glUniformMatrix4fv(0, 1, GL_FALSE, P);
+	glUniformMatrix4fv(1, 1, GL_FALSE, V);
+	glUniformMatrix4fv(2, 1, GL_FALSE, M);
+
+	int i = 0;
+	for (; i < t_count; ++i)
+	{
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, T[i].handle);
+		glUniform1i(3 + i, 0 + i);
+	}
+
+	glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
+}
+
+Framebuffer MakeFramebuffer(unsigned width, unsigned height, unsigned nColors)
+{
+	Framebuffer retval = { 0,width,height,0,0,0,0,0,0,0,0 };
+
+	glGenFramebuffers(1, &retval.handle);
+	glBindFramebuffer(GL_FRAMEBUFFER, retval.handle);
+
+	const GLenum attachments[8] =
+	{ GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2,
+		GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4, GL_COLOR_ATTACHMENT5,
+		GL_COLOR_ATTACHMENT6, GL_COLOR_ATTACHMENT7 };
+
+	for (int i = 0; i < nColors && i < 8; ++i)
+	{
+		retval.colors[i] = MakeTex(width, height, GL_RGBA, 0);
+		glFramebufferTexture(GL_FRAMEBUFFER, attachments[i], retval.colors[i].handle, 0);
+	}
+	glDrawBuffers(nColors, attachments);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	return retval;
 }
