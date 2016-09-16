@@ -19,4 +19,42 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\res\shaders\CameraFrag.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\CameraVert.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\PerlinFrag.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\PerlinVert.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\PhongFrag.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\PhongVert.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\PostFrag.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\PostVert.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\SimpleFrag.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\SimpleVert.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\TextureFrag.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\TextureVert.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

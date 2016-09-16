@@ -7,6 +7,7 @@
 #include "Input.h"
 #include "Camera.h"
 #include "Procgen.h"
+#include "Vertex.h"
 
 #include "GLM\glm.hpp"
 #include "GLM\ext.hpp"
@@ -21,43 +22,61 @@ int main()
 	glm::mat4 view = glm::lookAt(glm::vec3(0.f, 1.5f, 3.f),  // eye
 								 glm::vec3(0.f, 1.5f, 0.f),  // center
 								 glm::vec3(0.f, 1.f, 0.f)); // up
-	glm::mat4 proj = glm::perspective(45.f, 16/9.f, 1.f, 100.f);
+	glm::mat4 proj = glm::perspective(45.f, 16 / 9.f, 1.f, 100.f);
 
 	/*Models*/
 	glm::mat4 modelC, modelS;
 
 	/*Geometry*/
 	Geometry geo = LoadObj("../res/models/bunny.obj");
-	Geometry sphere = LoadObj("../res/models/soulspear.obj");
+	Geometry spear = LoadObj("../res/models/soulspear.obj");
 
 	/*Shader*/
-	Shader shader = LoadShader("../res/shaders/PhongVert.txt", "../res/shaders/PhongFrag.txt");
+	Shader shader = LoadShader("../res/shaders/PhongVert.glsl", "../res/shaders/PhongFrag.glsl");
 
 	/*Texture*/
 	Texture tarray[] = { LoadTex("../res/textures/soulspear_diffuse.tga"),
 		LoadTex("../res/textures/soulspear_specular.tga"),
 		LoadTex("../res/textures/soulspear_normal.tga") };
 
+	Framebuffer frame = MakeFramebuffer(1280, 720, 3);
+	Framebuffer screen = { 0, 1280, 720, 1 };
+
+	Vertex  verts[4] = { { { -1,-1,0,1 },{},{},{ 0,0 } },
+						 { { 1,-1,0,1 },{},{},{ 1,0 } },
+						 { { 1, 1,0,1 },{},{},{ 1,1 } },
+						 { {-1, 1,0,1 },{},{},{ 0,1 } } };
+
+	unsigned tris[] = { 0,1,2,2,3,0 };
+
+	Geometry quad = MakeGeometry(verts, 4, tris, 6);
+
+	Shader post = LoadShader("../res/shaders/PostVert.glsl", "../res/shaders/PostFrag.glsl");
+
 	float time = 0;
 	while (window.Step())
 	{
+		ClearFramebuffer(frame);
 		input.Step();
 		time += 0.016f;
-		//modelC = glm::rotate(time, glm::vec3(0, 1, 1)) * glm::scale(glm::vec3(1, 1, 1));
-		//modelS = glm::rotate(time, glm::vec3(0, 0, 1)) * glm::scale(glm::vec3(1, 1, 1));
-		modelS = glm::rotate(time, glm::normalize(glm::vec3(0, 1, 0)));
+		modelC = glm::rotate(time, glm::normalize(glm::vec3(0, 1, 0)));
 
-		/*drawPhong(shader, geo, 
+		DrawFB(shader, spear, frame,
 			glm::value_ptr(modelC),
-			glm::value_ptr(view), 
-			glm::value_ptr(proj));*/
-
-		drawPhong(shader, sphere,
-			glm::value_ptr(modelS),
 			glm::value_ptr(view),
-			glm::value_ptr(proj), tarray, 3);
+			glm::value_ptr(proj),
+			tarray, 3);
+
+		DrawFB(post, quad, screen, glm::value_ptr(glm::mat4(time)),
+				glm::value_ptr(glm::mat4()),
+				glm::value_ptr(glm::mat4()),
+				frame.colors, frame.nColors);
 	}
 
+	FreeFramebuffer(frame);
+	FreeShader(shader);
+	FreeGeometry(spear);
+	for each(auto &t in tarray) FreeTexture(t);
 	window.Term();
 	return 0;
 }

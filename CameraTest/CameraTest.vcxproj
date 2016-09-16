@@ -120,6 +120,20 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\res\shaders\CameraFrag.glsl" />
+    <None Include="..\res\shaders\CameraVert.glsl" />
+    <None Include="..\res\shaders\PerlinFrag.glsl" />
+    <None Include="..\res\shaders\PerlinVert.glsl" />
+    <None Include="..\res\shaders\PhongFrag.glsl" />
+    <None Include="..\res\shaders\PhongVert.glsl" />
+    <None Include="..\res\shaders\PostFrag.glsl" />
+    <None Include="..\res\shaders\PostVert.glsl" />
+    <None Include="..\res\shaders\SimpleFrag.glsl" />
+    <None Include="..\res\shaders\SimpleVert.glsl" />
+    <None Include="..\res\shaders\TextureFrag.glsl" />
+    <None Include="..\res\shaders\TextureVert.glsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
