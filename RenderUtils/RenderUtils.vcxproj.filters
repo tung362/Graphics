@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="GLStuff">
+      <UniqueIdentifier>{d650de40-95db-4c65-bc82-5bee7c2ee228}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="crenderutils.cpp">
@@ -36,6 +39,15 @@
     <ClCompile Include="Procgen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="glload.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="glmake.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gldraw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="crenderutils.h">
@@ -53,9 +65,6 @@
     <ClInclude Include="Gallery.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Globjects.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -66,6 +75,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Procgen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Globjs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="glmake.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="glload.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gldraw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

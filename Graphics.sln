@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CameraTest", "CameraTest\Ca
 		{9F6C90D3-A2E8-4EFA-9C2C-77B11800E9BC} = {9F6C90D3-A2E8-4EFA-9C2C-77B11800E9BC}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shaders", "Shaders\Shaders.vcxproj", "{A0CEB643-9FEF-44FC-9430-D00F48BAE987}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -47,6 +49,14 @@ Global
 		{B365E33B-913B-42A9-BD47-CF86CB300D1D}.Release|x64.Build.0 = Release|x64
 		{B365E33B-913B-42A9-BD47-CF86CB300D1D}.Release|x86.ActiveCfg = Release|Win32
 		{B365E33B-913B-42A9-BD47-CF86CB300D1D}.Release|x86.Build.0 = Release|Win32
+		{A0CEB643-9FEF-44FC-9430-D00F48BAE987}.Debug|x64.ActiveCfg = Debug|x64
+		{A0CEB643-9FEF-44FC-9430-D00F48BAE987}.Debug|x64.Build.0 = Debug|x64
+		{A0CEB643-9FEF-44FC-9430-D00F48BAE987}.Debug|x86.ActiveCfg = Debug|Win32
+		{A0CEB643-9FEF-44FC-9430-D00F48BAE987}.Debug|x86.Build.0 = Debug|Win32
+		{A0CEB643-9FEF-44FC-9430-D00F48BAE987}.Release|x64.ActiveCfg = Release|x64
+		{A0CEB643-9FEF-44FC-9430-D00F48BAE987}.Release|x64.Build.0 = Release|x64
+		{A0CEB643-9FEF-44FC-9430-D00F48BAE987}.Release|x86.ActiveCfg = Release|Win32
+		{A0CEB643-9FEF-44FC-9430-D00F48BAE987}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

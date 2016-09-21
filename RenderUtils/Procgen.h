@@ -1,5 +1,5 @@
 #pragma once
-#include "Globjects.h"
+#include "Globjs.h"
 
 //Generate a grid
 Geometry GenGrid(int sqr, float dim);

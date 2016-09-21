@@ -8,11 +8,18 @@ struct Vertex
 	glm::vec4 normal;
 	glm::vec2 texcoord;
 
-	enum MyEnum
+	enum
 	{
 		POSITION = 0,
 		COLOR = 16,
 		NORMAL = 32,
-		TEXCOORD = 48
+		TEXCOORD = 48,
 	};
 };
+
+const Vertex  quad_verts[4] = { { { -1,-1, 0, 1 }, { 1,1,1,0 }, { 0,0,1,0 }, { 0,0 } },
+								{ { 1,-1, 0, 1 }, { 1,1,0,1 }, { 0,0,1,0 }, { 1,0 } },
+								{ { 1, 1, 0, 1 }, { 1,0,1,1 }, { 0,0,1,0 }, { 1,1 } },
+								{ { -1, 1, 0, 1 }, { 0,1,1,1 }, { 0,0,1,0 }, { 0,1 } } };
+
+const unsigned quad_tris[6] = { 0, 1, 2,2, 3, 0 };

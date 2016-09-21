@@ -2,7 +2,7 @@
 #include <string>
 #include <map>
 
-#include "crenderutils.h"
+#include "Globjs.h"
 #include "Vertex.h"
 
 class Gallery

@@ -39,7 +39,9 @@ int main()
 		LoadTex("../res/textures/soulspear_specular.tga"),
 		LoadTex("../res/textures/soulspear_normal.tga") };
 
-	Framebuffer frame = MakeFramebuffer(1280, 720, 3);
+	Framebuffer frame = MakeFramebuffer(1280, 720, 1);
+	Framebuffer frame2 = MakeFramebuffer(1280, 720, 1);
+
 	Framebuffer screen = { 0, 1280, 720, 1 };
 
 	Vertex  verts[4] = { { { -1,-1,0,1 },{},{},{ 0,0 } },
@@ -53,24 +55,41 @@ int main()
 
 	Shader post = LoadShader("../res/shaders/PostVert.glsl", "../res/shaders/PostFrag.glsl");
 
+	frame.colors[frame.nColors] = frame.depth;
 	float time = 0;
 	while (window.Step())
 	{
 		ClearFramebuffer(frame);
+		ClearFramebuffer(frame2);
 		input.Step();
 		time += 0.016f;
 		modelC = glm::rotate(time, glm::normalize(glm::vec3(0, 1, 0)));
 
-		DrawFB(shader, spear, frame,
+		/*DrawFB(shader, spear, frame,
 			glm::value_ptr(modelC),
 			glm::value_ptr(view),
 			glm::value_ptr(proj),
 			tarray, 3);
 
+		DrawFB(post, quad, frame2, glm::value_ptr(glm::mat4(time)),
+			glm::value_ptr(glm::mat4()),
+			glm::value_ptr(glm::mat4()),
+			frame.colors, frame.nColors + 1);
+
+		DrawFB(post, quad, frame, glm::value_ptr(glm::mat4(time)),
+			glm::value_ptr(glm::mat4()),
+			glm::value_ptr(glm::mat4()),
+			frame2.colors, frame2.nColors);
+
+		DrawFB(post, quad, frame2, glm::value_ptr(glm::mat4(time)),
+			glm::value_ptr(glm::mat4()),
+			glm::value_ptr(glm::mat4()),
+			frame.colors, frame.nColors);
+
 		DrawFB(post, quad, screen, glm::value_ptr(glm::mat4(time)),
-				glm::value_ptr(glm::mat4()),
-				glm::value_ptr(glm::mat4()),
-				frame.colors, frame.nColors);
+			glm::value_ptr(glm::mat4()),
+			glm::value_ptr(glm::mat4()),
+			frame2.colors, frame2.nColors);*/
 	}
 
 	FreeFramebuffer(frame);

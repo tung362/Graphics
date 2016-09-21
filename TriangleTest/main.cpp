@@ -1,34 +1,34 @@
-#include <iostream>
-
-#include "Window.h"
 #include "crenderutils.h"
-#include "Gallery.h"
 
-int main()
+#include "GLM\ext.hpp"
+
+void main()
 {
-	Window window;
-	Gallery gallery;
+	Window context;
+	context.Init(1280, 720);
 
-	window.Init(800, 600, "I got a title :^)");
+	Framebuffer screen = { 0,1280,720 };
 
-	Vertex verts[] = { { 1,1,0,1 },{ 1,-1,0,1 },{ -1,-1,0,1 },{ -1,1,0,1 } };
-	unsigned tris[] = { 0,1,2, 2,3,0 };
+	Geometry quad = MakeGeometry(quad_verts, 4, quad_tris, 6);
 
-	gallery.MakeObject("quad", verts, 4, tris, 6);
+	Shader simple = LoadShader("../res/shaders/simple.vert", "../res/shaders/simple.frag");
 
-	gallery.LoadObjectOBJ("Sphere", "../res/models/sphere.obj");
-	gallery.LoadShader("Simple", "../res/shaders/SimpleVert.txt", "../res/shaders/SimpleFrag.txt");
+	Geometry spear = LoadObj("../res/models/soulspear.obj");
 
-	float time = 0;
+	Texture spear_normal = LoadTex("../res/textures/soulspear_normal.tga");
+	Texture spear_diffuse = LoadTex("../res/textures/soulspear_diffuse.tga");
+	Texture spear_specular = LoadTex("../res/textures/soulspear_specular.tga");
 
-	while (window.Step())
+	glm::mat4 model, view, proj;
+
+	model = glm::translate(glm::vec3(0, -1, 0));
+	view = glm::lookAt(glm::vec3(0, 0, 4), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	proj = glm::perspective(45.f, 1280.f / 720, 1.f, 100.f);
+
+	while (context.Step())
 	{
-		time += 0.0016667f;
-		//Draw(gallery.GetShader("Simple"), gallery.GetObject("Sphere"), time);
-		Draw(gallery.GetShader("Simple"), gallery.GetObject("quad"), time);
+		Tdraw(simple, spear, screen, model, view, proj, spear_diffuse, spear_normal, spear_specular);
 	}
 
-	gallery.Term();
-	window.Term();
-	return 0;
+	context.Term();
 }

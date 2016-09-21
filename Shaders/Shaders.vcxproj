@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{B365E33B-913B-42A9-BD47-CF86CB300D1D}</ProjectGuid>
-    <RootNamespace>CameraTest</RootNamespace>
+    <ProjectGuid>{A0CEB643-9FEF-44FC-9430-D00F48BAE987}</ProjectGuid>
+    <RootNamespace>Shaders</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -74,12 +74,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)RenderUtils\;$(SolutionDir)dep\include\</AdditionalIncludeDirectories>
     </ClCompile>
-    <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>RenderUtils.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -95,13 +90,10 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)RenderUtils\;$(SolutionDir)dep\include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>RenderUtils.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -118,7 +110,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <None Include="..\res\shaders\CameraFrag.glsl" />
+    <None Include="..\res\shaders\CameraVert.glsl" />
+    <None Include="..\res\shaders\PerlinFrag.glsl" />
+    <None Include="..\res\shaders\PerlinVert.glsl" />
+    <None Include="..\res\shaders\PhongFrag.glsl" />
+    <None Include="..\res\shaders\PhongVert.glsl" />
+    <None Include="..\res\shaders\PostFrag.glsl" />
+    <None Include="..\res\shaders\PostVert.glsl" />
+    <None Include="..\res\shaders\Simple.frag" />
+    <None Include="..\res\shaders\Simple.vert" />
+    <None Include="..\res\shaders\SimpleFrag.glsl" />
+    <None Include="..\res\shaders\SimpleVert.glsl" />
+    <None Include="..\res\shaders\TextureFrag.glsl" />
+    <None Include="..\res\shaders\TextureVert.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
