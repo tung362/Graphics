@@ -57,5 +57,23 @@
     <None Include="..\res\shaders\Simple.vert">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="..\res\shaders\Gpass.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\GPass.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\Quad.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\Quad.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\Lpass.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\Lpass.vert">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

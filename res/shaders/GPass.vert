@@ -14,8 +14,9 @@ layout(location = 2) uniform mat4 proj;
 
 void main()
 {
-	vNormal = (model * normal).xyz;
-	vPosition = (model * position).xyz;
+	vNormal   = (view * model * normal).xyz;
+	vPosition = (view * model * position).xyz;
+
 	vUV = texcoord;
 	gl_Position = proj * view * model * position;
 }

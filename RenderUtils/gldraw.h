@@ -12,7 +12,6 @@ namespace Tdraw_internal
 
 	size_t Tdraw_format(size_t idx, size_t tex, const glm::mat4 &val);
 	size_t Tdraw_format(size_t idx, size_t tex, const glm::vec3 &val);
-
 	size_t Tdraw_format(size_t idx, size_t tex, int   val);
 	size_t Tdraw_format(size_t idx, size_t tex, float val);
 	size_t Tdraw_format(size_t idx, size_t tex, const Texture &val);

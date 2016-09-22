@@ -2,11 +2,6 @@
 
 #include "Window.h"
 #include "crenderutils.h"
-#include "Gallery.h"
-#include "Timer.h"
-#include "Input.h"
-#include "Camera.h"
-#include "Procgen.h"
 #include "Vertex.h"
 
 #include "GLM\glm.hpp"
@@ -15,9 +10,7 @@
 int main()
 {
 	Window window;
-	Input input;
 	window.Init(1280, 720, "I got a title :V");
-	input.Init(window);
 
 	glm::mat4 view = glm::lookAt(glm::vec3(0.f, 1.5f, 3.f),  // eye
 								 glm::vec3(0.f, 1.5f, 0.f),  // center
@@ -61,7 +54,6 @@ int main()
 	{
 		ClearFramebuffer(frame);
 		ClearFramebuffer(frame2);
-		input.Step();
 		time += 0.016f;
 		modelC = glm::rotate(time, glm::normalize(glm::vec3(0, 1, 0)));
 

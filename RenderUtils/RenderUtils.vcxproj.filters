@@ -24,21 +24,6 @@
     <ClCompile Include="Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Gallery.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Procgen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="glload.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -60,21 +45,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gldecs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Gallery.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Procgen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Globjs.h">
