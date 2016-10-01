@@ -61,12 +61,12 @@ vec4 ColorCorrection(in sampler2D map, in vec2 UV)
 
     vec3 meanLuminosity = vec3(0.5f, 0.5f, 0.5f);
     vec3 rgb2greyCoeff = vec3(0.299f, 0.587f, 0.114f);
-    vec3 brightened = vec3(retval.r, retval.g, retval.b) * brightness;
-    float intensity = dot(brightened, rgb2greyCoeff);		
-    vec3 saturated = lerp(vec3(intensity, intensity, intensity), brightened, saturation);
-    vec3 contrasted = lerp(meanLuminosity, saturated, contrast);
+    vec3 brightened = retval * brightness;
+    //float intensity = dot(brightened, rgb2greyCoeff);		
+   // vec3 saturated = lerp(vec3(intensity, intensity, intensity), brightened, saturation);
+   // vec3 contrasted = lerp(meanLuminosity, saturated, contrast);
     
-    retval = vec4(contrasted.x, contrasted.y, contrasted.z, 1);
+    //retval = vec4(brightened.x, brightened.y, brightened.z, 1.0f);
 	return retval;
 }
 
