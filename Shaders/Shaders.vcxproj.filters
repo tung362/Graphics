@@ -27,12 +27,6 @@
     <None Include="..\res\shaders\PhongVert.glsl">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="..\res\shaders\PostFrag.glsl">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\res\shaders\PostVert.glsl">
-      <Filter>Source Files</Filter>
-    </None>
     <None Include="..\res\shaders\SimpleFrag.glsl">
       <Filter>Source Files</Filter>
     </None>
@@ -73,6 +67,24 @@
       <Filter>Source Files</Filter>
     </None>
     <None Include="..\res\shaders\Lpass.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\Post.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\Post.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\Spass.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\Spass.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\Lspass.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\res\shaders\Lspass.vert">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>

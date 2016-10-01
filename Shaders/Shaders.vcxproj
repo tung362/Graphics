@@ -116,18 +116,22 @@
     <None Include="..\res\shaders\GPass.vert" />
     <None Include="..\res\shaders\Lpass.frag" />
     <None Include="..\res\shaders\Lpass.vert" />
+    <None Include="..\res\shaders\Lspass.frag" />
+    <None Include="..\res\shaders\Lspass.vert" />
     <None Include="..\res\shaders\PerlinFrag.glsl" />
     <None Include="..\res\shaders\PerlinVert.glsl" />
     <None Include="..\res\shaders\PhongFrag.glsl" />
     <None Include="..\res\shaders\PhongVert.glsl" />
-    <None Include="..\res\shaders\PostFrag.glsl" />
-    <None Include="..\res\shaders\PostVert.glsl" />
+    <None Include="..\res\shaders\Post.frag" />
+    <None Include="..\res\shaders\Post.vert" />
     <None Include="..\res\shaders\Quad.frag" />
     <None Include="..\res\shaders\Quad.vert" />
     <None Include="..\res\shaders\Simple.frag" />
     <None Include="..\res\shaders\Simple.vert" />
     <None Include="..\res\shaders\SimpleFrag.glsl" />
     <None Include="..\res\shaders\SimpleVert.glsl" />
+    <None Include="..\res\shaders\Spass.frag" />
+    <None Include="..\res\shaders\Spass.vert" />
     <None Include="..\res\shaders\TextureFrag.glsl" />
     <None Include="..\res\shaders\TextureVert.glsl" />
   </ItemGroup>

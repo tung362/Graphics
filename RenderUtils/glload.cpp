@@ -22,12 +22,12 @@ std::string CppStyleFileToString(const char *path)
 	return file_contents;
 }
 
-Shader LoadShader(const char *vpath, const char *fpath)
+Shader LoadShader(const char *vpath, const char *fpath, bool depth, bool add, bool face)
 {
 	std::string vs = CppStyleFileToString(vpath);
 	std::string fs = CppStyleFileToString(fpath);
 
-	return MakeShader(vs.c_str(), fs.c_str());
+	return MakeShader(vs.c_str(), fs.c_str(), depth, add, face);
 }
 
 Texture LoadTex(const char *path)
@@ -43,14 +43,6 @@ Texture LoadTex(const char *path)
 	p = stbi_load(path, &w, &h, &f, STBI_default);
 
 	if (!p) return retval;
-
-	switch (f)
-	{
-	case STBI_grey:		  f = GL_RED;  break;
-	case STBI_grey_alpha: f = GL_RG;   break;
-	case STBI_rgb:		  f = GL_RGB;  break;
-	case STBI_rgb_alpha:  f = GL_RGBA; break;
-	}
 
 	retval = MakeTex(w, h, f, p);
 	stbi_image_free(p);
