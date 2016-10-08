@@ -8,6 +8,8 @@ layout(location = 0) uniform mat4 model;
 layout(location = 1) uniform mat4 view;
 layout(location = 2) uniform mat4 proj;
 
+layout(location = 6) uniform bool shapeMod;
+
 out vec2 vUV;
 out vec3 vNormal;
 out vec3 vPosition;

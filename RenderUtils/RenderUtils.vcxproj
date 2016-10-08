@@ -130,19 +130,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="crenderutils.cpp" />
     <ClCompile Include="gldraw.cpp" />
     <ClCompile Include="glload.cpp" />
     <ClCompile Include="glmake.cpp" />
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Procgen.cpp" />
+    <ClCompile Include="RadialGradientGen.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="crenderutils.h" />
     <ClInclude Include="gldecs.h" />
     <ClInclude Include="gldraw.h" />
     <ClInclude Include="glload.h" />
     <ClInclude Include="glmake.h" />
     <ClInclude Include="Globjs.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="Procgen.h" />
+    <ClInclude Include="RadialGradientGen.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

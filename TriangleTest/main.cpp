@@ -1,6 +1,11 @@
 #include "crenderutils.h"
-
+#include "RadialGradientGen.h"
+#include "Timer.h"
+#include "Input.h"
+#include "Camera.h"
+#include "Procgen.h"
 #include "GLM\ext.hpp"
+#include <iostream>
 
 struct RenderObject
 {
@@ -26,12 +31,20 @@ struct DirectionalLight
 void main()
 {
 	Window context;
+	Input input;
+	Time time;
+
 	context.Init(1280, 720);
+	input.Init(context);
+	time.Init();
 
 	//Objects//
 	Geometry quad = MakeGeometry(quad_verts, 4, quad_tris, 6);
 	Geometry spear = LoadObj("../res/models/soulspear.obj");
 	Geometry sphere = LoadObj("../res/models/sphere.obj");
+
+	//Generated objects
+	//Texture noise = GenRadialGradient(64, glm::vec4(1, 0, 0, 1), glm::vec4(0, 0, 1, 1), 0.5f);
 
 
 	//Load objs//
@@ -48,6 +61,10 @@ void main()
 	Texture vertex_normals = MakeTex(1, 1, 4, norm_pixels);
 	const unsigned char white_pixels[4] = { 255, 255, 255, 255 };
 	Texture white = MakeTex(1, 1, 4, white_pixels);
+	const unsigned char red_pixels[4] = { 255, 0, 0, 255 };
+	Texture red = MakeTex(1, 1, 4, red_pixels);
+	const unsigned char blue_pixels[4] = { 0, 0, 255, 255 };
+	Texture blue = MakeTex(1, 1, 4, blue_pixels);
 
 
 	//Shaders//
@@ -91,11 +108,11 @@ void main()
 	glm::vec4 greenColor = glm::vec4(0, 1, 0, 1);
 
 
-	float time = 0;
 	while (context.Step())
 	{
-		time += 0.016f;
-		spearModel = glm::rotate(time, glm::vec3(0, 1, 0)) * glm::translate(glm::vec3(0, -1, 0)) * glm::scale(glm::vec3(1, 1, 1));
+		time.Step();
+		input.Step();
+		spearModel = glm::rotate(time.GetTotalTime(), glm::vec3(0, 1, 0)) * glm::translate(glm::vec3(0, -1, 0)) * glm::scale(glm::vec3(1, 1, 1));
 
 		//Geometry pass//
 		ClearFramebuffer(geometryFrame);
@@ -129,11 +146,8 @@ void main()
 
 
 		//Post pass//
-		ClearFramebuffer(postFrame);
-		Tdraw(postShader, spear, postFrame, lightFrame.colors[0]);
-		Tdraw(postShader, sphere, postFrame, lightFrame.colors[0]);
-		Tdraw(postShader, quad, postFrame, lightFrame.colors[0]);
-
+		ClearFramebuffer(postFrame); 
+		Tdraw(postShader, quad, postFrame, lightFrame.colors[0], 1.0f, 1.0f, 1.0f, glm::vec4(1, 0, 0, 1), glm::vec4(0, 0, 1, 1), 0.5f);
 
 		//Test
 		//Debug windows
@@ -150,5 +164,7 @@ void main()
 		Tdraw(qdraw, quad, screen, postFrame.colors[0], mod);
 	}
 
+	input.Term();
+	time.Term();
 	context.Term();
 }
