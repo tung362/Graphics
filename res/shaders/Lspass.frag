@@ -42,6 +42,9 @@ void main()
 	vec3 L = normalize((view * lightView[2]).xyz);
 	vec3 N = normalize(texture(normalMap, vUV).xyz);
 	vec4 P = texture(positionMap,vUV);
+	//Rim shading
+	vec3 V = normalize(-P.rgb);
+	float EYE = 1.0 - max(dot(V, N), 0.0);
 
 	//Shadow Map calculations//
 	//VIEW -> WORLD -> LIGHT -> CLIP -> UV
@@ -64,11 +67,27 @@ void main()
 		if(spec > 0)
 				spec = pow(spec, sP);
 
+		vec3 rim = vec3(smoothstep(0.8, 1.0, EYE));
+		//vec4(EYE, EYE,EYE, 1);
 
 		//Final Result
-		outAlbedo   = texture(albedoMap,   vUV) * lamb * lCol;
+		outAlbedo = texture(albedoMap,   vUV) * lamb * lCol;
 		outSpecular = texture(specularMap, vUV) * spec * lCol;
-		outColor    =  outAlbedo + outSpecular;
+		outColor =  outAlbedo + outSpecular + vec4(rim.x, rim.y, rim.z, 1);
+
+		if((outAlbedo + outSpecular).rgb == vec3(0, 0, 0)) outColor = outAlbedo + outSpecular;
+
+
+		//Metal
+		//float intensity = dot(L,normalize(N));
+		//if (intensity > 0.95)
+		//	outColor = vec4(1, 1, 1, 1);
+		//else if (intensity > 0.5)
+		//	outColor = vec4(0.2, 0.2, 0.2, 1);
+		//else if (intensity > 0.25)
+		//	outColor = vec4(0, 0, 0, 1);
+		//else
+		//	outColor = vec4(0, 0, 0, 1);
 	}
 	else
 	{

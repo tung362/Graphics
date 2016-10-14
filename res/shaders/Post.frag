@@ -71,9 +71,9 @@ vec4 ColorCorrection(in sampler2D map, in vec2 UV)
 {
 	vec4 retval = texture(map, vUV);
     vec3 meanLuminosity = vec3(0.5f, 0.5f, 0.5f);
-    vec3 rgb2greyCoeff = vec3(0.299f, 0.587f, 0.114f);
+    vec3 rgbToGreyCoeff = vec3(0.299f, 0.587f, 0.114f);
     vec3 brightened = vec3(retval.x, retval.y, retval.z) * colorCorrectionBrightness;
-    float intensity = dot(brightened, rgb2greyCoeff);		
+    float intensity = dot(brightened, rgbToGreyCoeff);		
     vec3 saturated = lerp(vec3(intensity, intensity, intensity), brightened, colorCorrectionSaturation);
     vec3 contrasted = lerp(meanLuminosity, saturated, colorCorrectionContrast);
 	retval = vec4(contrasted.x, contrasted.y, contrasted.z, retval.w);
@@ -83,9 +83,9 @@ vec4 ColorCorrection(vec4 color)
 {
 	vec4 retval = color;
     vec3 meanLuminosity = vec3(0.5f, 0.5f, 0.5f);
-    vec3 rgb2greyCoeff = vec3(0.299f, 0.587f, 0.114f);
+    vec3 rgbToGreyCoeff = vec3(0.299f, 0.587f, 0.114f);
     vec3 brightened = vec3(retval.x, retval.y, retval.z) * colorCorrectionBrightness;
-    float intensity = dot(brightened, rgb2greyCoeff);		
+    float intensity = dot(brightened, rgbToGreyCoeff);		
     vec3 saturated = lerp(vec3(intensity, intensity, intensity), brightened, colorCorrectionSaturation);
     vec3 contrasted = lerp(meanLuminosity, saturated, colorCorrectionContrast);
 	retval = vec4(contrasted.x, contrasted.y, contrasted.z, retval.w);
