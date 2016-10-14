@@ -41,9 +41,6 @@ void main()
 	Geometry plane = GenGrid(512, 20);
 	Geometry plane2 = GenGrid(512, 20);
 
-	//Generated objects
-	//Texture noise = GenRadialGradient(64, glm::vec4(1, 0, 0, 1), glm::vec4(0, 0, 1, 1), 0.5f);
-
 
 	//Load objs//
 	Texture spear_normal = LoadTex("../res/textures/soulspear_normal.tga");
@@ -207,8 +204,6 @@ void main()
 		Tdraw(spass, spear, shadowFrame, spearModel, redView, lightProj);
 		Tdraw(spass, sphere, shadowFrame, sphereModel, redView, lightProj);
 		Tdraw(spass, quad, shadowFrame, wallModel, redView, lightProj);
-		//Tdraw(spass, plane, shadowFrame, planeModel, redView, lightProj);
-		//Tdraw(spass, plane2, shadowFrame, planeModel2, redView, lightProj);
 		//Light aggregation
 		Tdraw(lpass, quad, lightFrame, camView,
 			geometryFrame.colors[0], geometryFrame.colors[1], geometryFrame.colors[2], geometryFrame.colors[3],
@@ -219,53 +214,18 @@ void main()
 		Tdraw(spass, spear, shadowFrame, spearModel, greenView, lightProj);
 		Tdraw(spass, sphere, shadowFrame, sphereModel, greenView, lightProj);
 		Tdraw(spass, quad, shadowFrame, wallModel, greenView, lightProj);
-		//Tdraw(spass, plane, shadowFrame, planeModel, greenView, lightProj);
-		//Tdraw(spass, plane2, shadowFrame, planeModel2, greenView, lightProj);
 		//add the green light now.
 		Tdraw(lpass, quad, lightFrame, camView,
 			geometryFrame.colors[0], geometryFrame.colors[1], geometryFrame.colors[2], geometryFrame.colors[3],
 			shadowFrame.depth, greenColor, greenView, lightProj, isPhong);
-
-		//Blue light
-		//ClearFramebuffer(shadowFrame);
-		//Tdraw(spass, spear, shadowFrame, spearModel, blueView, lightProj);
-		//Tdraw(spass, sphere, shadowFrame, sphereModel, blueView, lightProj);
-		//Tdraw(spass, quad, shadowFrame, wallModel, blueView, lightProj);
-		////Tdraw(spass, plane, shadowFrame, planeModel, blueView, lightProj);
-		////add the blue light now.
-		//Tdraw(lpass, quad, lightFrame, camView,
-		//	geometryFrame.colors[0], geometryFrame.colors[1], geometryFrame.colors[2], geometryFrame.colors[3],
-		//	shadowFrame.depth, blueColor, blueView, lightProj, isPhong);
-
-		//Whites light
-		//To do: add a light map
-		//ClearFramebuffer(shadowFrame);
-		//Tdraw(spass, spear, shadowFrame, spearModel, whiteView, lightProj);
-		//Tdraw(spass, sphere, shadowFrame, sphereModel, whiteView, lightProj);
-		//Tdraw(spass, quad, shadowFrame, wallModel, whiteView, lightProj);
-		////Tdraw(spass, plane, shadowFrame, planeModel, whiteView, lightProj);
-		////add the blue light now.
-		//Tdraw(lpass, quad, lightFrame, camView,
-		//	geometryFrame.colors[0], geometryFrame.colors[1], geometryFrame.colors[2], geometryFrame.colors[3],
-		//	shadowFrame.depth, whiteColor, whiteView, lightProj, isPhong);
 
 
 		//Post pass//
 		ClearFramebuffer(postFrame); 
 		Tdraw(postShader, quad, postFrame, lightFrame.colors[0], saturation, brightness, contrast, glm::vec4(1, 0, 0, 1), glm::vec4(0, 0, 1, 1), 0.5f);
 
-		//Test
-		//Debug windows
-		/*Texture debug_list[] = { geometryFrame.colors[0], geometryFrame.colors[1], geometryFrame.colors[2], geometryFrame.colors[3], geometryFrame.depth, lightFrame.colors[1], lightFrame.colors[2], shadowFrame.depth};
-		for (int i = 0; i < sizeof(debug_list) / sizeof(Texture); ++i)
-		{
-			glm::mat4 mod = glm::translate(glm::vec3(-.75f + .5f*(i % 4), 0.75f - .5f*(i / 4), 0)) * glm::scale(glm::vec3(0.25f, 0.25f, 1.f));
-			Tdraw(qdraw, quad, screen, debug_list[i], mod);
-		}*/
-
 
 		//Final Product
-		//glm::mat4 mod = glm::translate(glm::vec3(-.5f, -0.5f, 0)) * glm::scale(glm::vec3(0.5f, 0.5f, 1.f));
 		glm::mat4 mod = glm::translate(glm::vec3(0, 0, 0)) * glm::scale(glm::vec3(1.0f, 1.0f, 1.f));
 		Tdraw(qdraw, quad, screen, postFrame.colors[0], mod);
 	}

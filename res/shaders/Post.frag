@@ -129,9 +129,4 @@ void main()
 	//outColor += RadialGradient(map, vUV);
 	//outColor += sobel(map, vUV);
 	//outColor += crossblur(map, vUV);
-
-	//vec4 ColorCorrected =  ColorCorrection2(outColor);
-	//outColor += ColorCorrected;
-
-	//outColor = Gradient(map, vUV);
 }
