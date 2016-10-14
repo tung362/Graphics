@@ -7,26 +7,22 @@
 #include "GLM\ext.hpp"
 #include <iostream>
 
-struct RenderObject
-{
-	Geometry mesh;
-	Texture norm, diff, spec;
-	glm::mat4 model;
-	static Framebuffer roFrame;
-	// gpass shader for this object.
-	// draw(...)
-};
-
-struct DirectionalLight
-{
-	glm::vec3 dir, color;
-	float size;
-	glm::mat4 getMatrix()
-	{
-		return glm::ortho<float>(-size, size, -size, size, -size, size)
-		*glm::lookAt(-dir, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-	}
-};
+/*
+------------------------------------
+CONTROLS:
+Move camera: wasd
+Look around: move mouse
+-: increase value
+=: decrease value
+1: Change value type to saturation
+2: Change value type to brightness
+3: Change value type to contrast
+4: Change value type to mountainScale
+5: Change value type to mountainX
+6: Change value type to mountainY
+9: Change illumination model
+------------------------------------
+*/
 
 void main()
 {
@@ -42,7 +38,7 @@ void main()
 	Geometry quad = MakeGeometry(quad_verts, 4, quad_tris, 6);
 	Geometry spear = LoadObj("../res/models/soulspear.obj");
 	Geometry sphere = LoadObj("../res/models/sphere.obj");
-	Geometry plane = GenGrid(516, 20);
+	Geometry plane = GenGrid(512, 20);
 	Geometry plane2 = GenGrid(512, 20);
 
 	//Generated objects
@@ -132,19 +128,28 @@ void main()
 	float mountainScale = 1;
 	float mountainX = 0.5f;
 	float mountainY = 0.5f;
+	bool isPhong = true;
 
 	while (context.Step())
 	{
 		time.Step();
 		input.Step();
 
-		//Value input
+		//Value inputs
+		//////////////////////////////////////////////////////////////////////////////////////////////////////
 		if (input.GetKeyState('1') == Input::RELEASE) changeType = 1;
 		if (input.GetKeyState('2') == Input::RELEASE) changeType = 2;
 		if (input.GetKeyState('3') == Input::RELEASE) changeType = 3;
 		if (input.GetKeyState('4') == Input::RELEASE) changeType = 4;
 		if (input.GetKeyState('5') == Input::RELEASE) changeType = 5;
 		if (input.GetKeyState('6') == Input::RELEASE) changeType = 6;
+
+		if (input.GetKeyState('9') == Input::RELEASE)
+		{
+			if (isPhong) isPhong = false;
+			else isPhong = true;
+			std::cout << isPhong << std::endl;
+		}
 
 		//Just for realtime changes
 		switch (changeType)
@@ -176,7 +181,7 @@ void main()
 		default:
 			break;
 		}
-
+		//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		spearModel = glm::rotate(time.GetTotalTime(), glm::vec3(0, 1, 0)) * glm::translate(glm::vec3(0, -1, 0)) * glm::scale(glm::vec3(1, 1, 1));
 
@@ -207,7 +212,7 @@ void main()
 		//Light aggregation
 		Tdraw(lpass, quad, lightFrame, camView,
 			geometryFrame.colors[0], geometryFrame.colors[1], geometryFrame.colors[2], geometryFrame.colors[3],
-			shadowFrame.depth, redColor, redView, lightProj);
+			shadowFrame.depth, redColor, redView, lightProj, isPhong);
 
 		//Green light
 		ClearFramebuffer(shadowFrame);
@@ -219,7 +224,7 @@ void main()
 		//add the green light now.
 		Tdraw(lpass, quad, lightFrame, camView,
 			geometryFrame.colors[0], geometryFrame.colors[1], geometryFrame.colors[2], geometryFrame.colors[3],
-			shadowFrame.depth, greenColor, greenView, lightProj);
+			shadowFrame.depth, greenColor, greenView, lightProj, isPhong);
 
 		//Blue light
 		//ClearFramebuffer(shadowFrame);
@@ -230,7 +235,7 @@ void main()
 		////add the blue light now.
 		//Tdraw(lpass, quad, lightFrame, camView,
 		//	geometryFrame.colors[0], geometryFrame.colors[1], geometryFrame.colors[2], geometryFrame.colors[3],
-		//	shadowFrame.depth, blueColor, blueView, lightProj);
+		//	shadowFrame.depth, blueColor, blueView, lightProj, isPhong);
 
 		//Whites light
 		//To do: add a light map
@@ -242,7 +247,7 @@ void main()
 		////add the blue light now.
 		//Tdraw(lpass, quad, lightFrame, camView,
 		//	geometryFrame.colors[0], geometryFrame.colors[1], geometryFrame.colors[2], geometryFrame.colors[3],
-		//	shadowFrame.depth, whiteColor, whiteView, lightProj);
+		//	shadowFrame.depth, whiteColor, whiteView, lightProj, isPhong);
 
 
 		//Post pass//

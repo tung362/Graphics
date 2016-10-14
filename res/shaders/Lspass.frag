@@ -2,6 +2,8 @@
 
 // Vertex Data
 in vec2 vUV;
+in vec4 vNormal;
+in vec4 VPosition;
 
 // Camera Data
 layout(location = 0) uniform mat4 view;
@@ -18,13 +20,15 @@ uniform float shadowBias = 0.1f;
 
 // Light Data
 layout(location = 6) uniform vec4 lCol;
-layout(location = 7) uniform mat4 lightView; // lightDirection is the forward now!
+layout(location = 7) uniform mat4 lightView;
 layout(location = 8) uniform mat4 lightProj;
 
 // Framebuffer Outputs
 layout(location = 0) out vec4 outColor;
 layout(location = 1) out vec4 outAlbedo;
 layout(location = 2) out vec4 outSpecular;
+
+layout(location = 9) uniform bool toggle;
 
 
 // Simple matrix that converts from clip space (-1,1) to UV space (0,1)
@@ -48,19 +52,46 @@ void main()
 	if(texture(shadowMap, sUV.xy).r < sUV.z - shadowBias)
 		discard;
 
-	//Phong calculations//
-	vec3 R = reflect(L, N);
-	vec3 E = normalize(view[3].xyz + P.xyz);
-	float sP = 2;
+	if(toggle)
+	{
+		//Phong calculations//
+		vec3 R = reflect(L, N);
+		vec3 E = normalize(view[3].xyz + P.xyz);
+		float sP = 2;
 
-	float lamb = max(0,-dot(L, N));
-	float spec = max(0,-dot(E, R));
-	if(spec > 0)
-			spec = pow(spec, sP);
+		float lamb = max(0,-dot(L, N));
+		float spec = max(0,-dot(E, R));
+		if(spec > 0)
+				spec = pow(spec, sP);
 
 
-	//Final Result
-	outAlbedo   = texture(albedoMap,   vUV) * lamb * lCol;
-	outSpecular = texture(specularMap, vUV) * spec * lCol;
-	outColor    =  outAlbedo + outSpecular;
+		//Final Result
+		outAlbedo   = texture(albedoMap,   vUV) * lamb * lCol;
+		outSpecular = texture(specularMap, vUV) * spec * lCol;
+		outColor    =  outAlbedo + outSpecular;
+	}
+	else
+	{
+		vec3 lightDir = normalize((view * lightView[2]).xyz);
+		vec3 normal = normalize(texture(normalMap, vUV).xyz);
+
+		vec3 color = texture(albedoMap, vUV).rgb;
+
+		//Ambient
+		vec3 ambient = 0.05 * color;
+
+		//Diffuse
+		vec3 diffuse = max(dot(lightDir, normal), 0.0) * color;
+
+		// Specular
+		vec3 viewDir = normalize(VPosition.xyz);
+		vec3 reflectDir = reflect(lightDir, normal);
+		vec3 halfwayDir = normalize(lightDir + viewDir);  
+		float spec = pow(max(dot(normal, halfwayDir), 0.0), 32.0);
+		vec3 specular = vec3(0.4, 0.4, 0.4) * spec; //Specular color
+
+		outAlbedo   = texture(albedoMap,   vUV) * vec4(diffuse.xyz, 1);
+		outSpecular = texture(specularMap, vUV) * vec4(specular.xyz, 1);
+		outColor = outAlbedo + outSpecular;//ambient
+	}
 }

@@ -37,13 +37,13 @@ bool Window::Init(int A_Width, int A_Height, char * A_Title)
 	//glEnable(GL_BLEND);
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-#ifdef _DEBUG
-	glEnable(GL_DEBUG_OUTPUT);
-	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-
-	glDebugMessageCallback(GL_errorCallback, 0);
-	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, 0, true);
-#endif
+//#ifdef _DEBUG
+//	glEnable(GL_DEBUG_OUTPUT);
+//	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+//
+//	glDebugMessageCallback(GL_errorCallback, 0);
+//	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, 0, true);
+//#endif
 
 	return true;
 }
